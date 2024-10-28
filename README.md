@@ -1,3 +1,4 @@
+[![Rust CI](https://github.com/nogibjj/individual2/actions/workflows/rust_ci.yml/badge.svg)](https://github.com/nogibjj/individual2/actions/workflows/rust_ci.yml)
 # Individual2: Rust Project with SQLite Integration
 
 ## **Overview**
@@ -17,77 +18,53 @@ This project is a **command-line application** built with **Rust** and **SQLite*
 3. **Database Operations:** Store, query, and manage transactions with **SQLite**.
 4. **CI Automation:** Automatically build, test, and release with **GitHub Actions**.
 5. **LLM Integration:** Assisted by **GitLab Copilot**, which guided design, coding, and troubleshooting.
+---
 
+## **Video Demo**
+
+- Documentation 
 ---
 
 ## **Project Dependencies**
 
-Make sure you have **Rust** and **SQLite** installed.
-
-### **`Cargo.toml` Dependencies:**
+ **Rust** and **SQLite** installed and in Cargo.toml
 
 ```toml
 [dependencies]
 rusqlite = "0.29.0"
 ```
-
-- **`rusqlite`**: A library to interact with **SQLite databases** in Rust.
-
 ---
 
-## **Setup and Installation**
+## **Run the Program**
 
-1. **Clone the Repository:**
 
-```bash
-git clone <repository-url>
-cd individual2
-```
-
-2. **Install Rust (if not installed):**
-
-Follow instructions from [Rust's official website](https://www.rust-lang.org/tools/install).
-
-3. **Build the Project:**
-
-```bash
-cargo build --release
-```
-
-4. **Create the SQLite Database:**
-
-The program will automatically create `my_database.db` inside the `database/` directory during the first run.
-
----
-
-## **How to Use the CLI*
-
-### ** Add a Transaction**
+**Add a Transaction**
 
 ```bash
 ./target/release/individual2 add "2021-01-31 00:09:01" 23.10
 ```
 
-### ** Update a Transaction**
+**Update a Transaction**
 ```
 ./target/release/individual2 add "2021-01-31 00:09:01" 23.10
 
 ```
-### ** Delete a Transaction**
+**Delete a Transaction**
 
 ```bash
 ./target/release/individual2 delete 1
 
 ```
 
-### ** List Transactions**
+**List Transactions**
 ```
 ./target/release/individual2 list
 
 ```
 
+---
 
-## **How to Use SQLite CLI to Verify Data**
+## **Use SQLite CLI to Verify Data**
 
 ```bash
 sqlite3 database/my_database.db
@@ -106,7 +83,7 @@ We use **GitHub Actions** to:
 - **Build and test** the project on every push or pull request.
 - **Upload a release binary** as an artifact for download.
 
-### **Workflow File: `.github/workflows/rust_ci.yml`**
+ **Workflow File: `.github/workflows/rust_ci.yml`**
 
 
 ---
@@ -143,11 +120,6 @@ Use the following commands for convenience:
 - **Run:** `make run`
 - **Test:** `make test`
 
----
-
-## **Video Demo**
-
-Watch the demo video here: 
 
 ---
 
