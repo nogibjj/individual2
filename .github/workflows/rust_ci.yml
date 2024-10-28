@@ -1,0 +1,29 @@
+name: Rust CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+
+    - name: Build release binary
+      run: cargo build --release
+
+    - name: Run tests
+      run: cargo test
+
+    - name: Upload binary artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my_rust_project
+        path: ./target/release/my_rust_project

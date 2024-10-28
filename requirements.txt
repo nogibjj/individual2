@@ -1,0 +1,4 @@
+# Core dependencies
+psutil==5.9.5  
+
+black==23.7.0  # Ensures code style consistency
