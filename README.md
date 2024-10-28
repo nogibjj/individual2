@@ -60,31 +60,32 @@ The program will automatically create `my_database.db` inside the `database/` di
 
 ---
 
-## **How to Run the Program**
+## **How to Use the CLI*
 
-### **1. Add a Transaction**
-
-```bash
-cargo run --release add "2021-01-31 00:09:01" 23.10
-```
-
-**Output:**
-```
-✅ Transaction added: 2021-01-31 00:09:01 - $23.10
-```
-
-### **2. Calculate 3-Day Rolling Average for January 31, 2021**
+### ** Add a Transaction**
 
 ```bash
-cargo run --release avg
+./target/release/individual2 add "2021-01-31 00:09:01" 23.10
 ```
 
-**Output:**
+### ** Update a Transaction**
 ```
-📊 3-Day Rolling Average for 2021-01-31: $21.19
+./target/release/individual2 add "2021-01-31 00:09:01" 23.10
+
+```
+### ** Delete a Transaction**
+
+```bash
+./target/release/individual2 delete 1
+
 ```
 
----
+### ** List Transactions**
+```
+./target/release/individual2 list
+
+```
+
 
 ## **How to Use SQLite CLI to Verify Data**
 

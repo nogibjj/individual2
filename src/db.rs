@@ -1,21 +1,24 @@
 use rusqlite::{params, Connection, Result};
+use crate::error::AppError;
 
-pub fn create_connection() -> Result<Connection> {
+pub fn create_connection() -> Result<Connection, AppError> {
     let conn = Connection::open("database/my_database.db")?;
     Ok(conn)
 }
 
-pub fn create_transactions_table(conn: &Connection) -> Result<()> {
+pub fn create_transactions_table(conn: &Connection) -> Result<(), AppError> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS transactions (
-            transaction_time TIMESTAMP,
-            transaction_amount FLOAT
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transaction_time TIMESTAMP NOT NULL,
+            transaction_amount FLOAT NOT NULL
         )",
         [],
     )?;
     Ok(())
 }
-pub fn insert_transaction(conn: &Connection, time: &str, amount: f64) -> Result<()> {
+
+pub fn insert_transaction(conn: &Connection, time: &str, amount: f64) -> Result<(), AppError> {
     conn.execute(
         "INSERT INTO transactions (transaction_time, transaction_amount) VALUES (?1, ?2)",
         params![time, amount],
@@ -23,33 +26,35 @@ pub fn insert_transaction(conn: &Connection, time: &str, amount: f64) -> Result<
     Ok(())
 }
 
-// Calculate a  bit
-pub fn get_rolling_avg_for_jan_31(conn: &Connection) -> Result<f64> {
-    let mut stmt = conn.prepare(
-        "
-        WITH daily_totals AS (
-            SELECT 
-                DATE(transaction_time) AS transaction_date,
-                SUM(transaction_amount) AS total_amount
-            FROM transactions
-            GROUP BY transaction_date
-        ),
-        rolling_avg AS (
-            SELECT 
-                transaction_date,
-                total_amount,
-                AVG(total_amount) OVER (
-                    ORDER BY transaction_date 
-                    ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
-                ) AS rolling_3_day_avg
-            FROM daily_totals
-        )
-        SELECT round(rolling_3_day_avg, 2)
-        FROM rolling_avg
-        WHERE transaction_date < '2021-01-31';
-        "
+pub fn update_transaction(conn: &Connection, id: i64, new_amount: f64) -> Result<(), AppError> {
+    let affected_rows = conn.execute(
+        "UPDATE transactions SET transaction_amount = ?1 WHERE id = ?2",
+        params![new_amount, id],
     )?;
+    if affected_rows == 0 {
+        return Err(AppError::InvalidInput(format!(
+            "No transaction found with ID {}",
+            id
+        )));
+    }
+    Ok(())
+}
 
-    let avg: f64 = stmt.query_row([], |row| row.get(0))?;
-    Ok(avg)
+pub fn delete_transaction(conn: &Connection, id: i64) -> Result<(), AppError> {
+    let affected_rows = conn.execute("DELETE FROM transactions WHERE id = ?1", params![id])?;
+    if affected_rows == 0 {
+        return Err(AppError::InvalidInput(format!(
+            "No transaction found with ID {}",
+            id
+        )));
+    }
+    Ok(())
+}
+
+pub fn list_transactions(conn: &Connection) -> Result<Vec<(i64, String, f64)>, AppError> {
+    let mut stmt = conn.prepare("SELECT id, transaction_time, transaction_amount FROM transactions")?;
+    let transactions = stmt
+        .query_map([], |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)))?
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(transactions)
 }

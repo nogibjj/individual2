@@ -1,6 +1,10 @@
 name: Rust CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -14,16 +18,20 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
+        components: clippy
         override: true
 
-    - name: Build release binary
+    - name: Run Clippy (Linting)
+      run: cargo clippy -- -D warnings
+
+    - name: Build Release Binary
       run: cargo build --release
 
-    - name: Run tests
+    - name: Run Tests
       run: cargo test
 
-    - name: Upload binary artifact
+    - name: Upload Binary Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: my_rust_project
-        path: ./target/release/my_rust_project
+        name: individual2
+        path: ./target/release/individual2
