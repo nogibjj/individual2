@@ -22,7 +22,7 @@ This project is a **command-line application** built with **Rust** and **SQLite*
 
 ## **Video Demo**
 
-- Documentation 
+- [Documentation ](https://www.youtube.com/watch?v=G_2HTIBk_0w)
 ---
 
 ## **Project Dependencies**
@@ -136,6 +136,5 @@ This project showcases how **Rust** and **SQLite** can be used together to build
 * [rust-cli-template](https://github.com/kbknapp/rust-cli-template)
 * https://github.com/nogibjj/rust-data-engineering
 * https://docs.rs/sqlite/latest/sqlite/
-* https://github.com/fivethirtyeight/data
 
 
